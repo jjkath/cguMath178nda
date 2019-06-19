@@ -1,0 +1,106 @@
+\documentclass{article}
+
+% if you need to pass options to natbib, use, e.g.:
+% \PassOptionsToPackage{numbers, compress}{natbib}
+% before loading nips_2016
+%
+% to avoid loading the natbib package, add option nonatbib:
+% \usepackage[nonatbib]{nips_2016}
+
+% \usepackage{nips_2016}
+
+% to compile a camera-ready version, add the [final] option, e.g.:
+\usepackage[final]{nips_2016}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+
+\title{Nonlinear Data Analytics Project Proposal}
+
+\author{
+  John Kath \\
+  \texttt{john.kath@cgu.edu} \\
+}
+
+\begin{document}
+
+\maketitle
+
+% \begin{abstract}
+% \end{abstract}
+
+\section{Project Overview}
+
+\subsection{Description}
+
+\textbf{Project Type (1)}
+
+\begin{enumerate}
+  \item Application of existing algorithm to a new problem and
+    potentially new data.
+\end{enumerate}
+
+\subsection{Requirements}
+
+\begin{itemize}
+  \item \textbf{Partner:} Work independently.
+  \item \textbf{Dataset:} HMOG cell phone data from at least five
+    users/activities. Will apply data analytics and ML methods using
+    accelerometer, gyroscope and magnetometer data (3-axis each).
+  \item \textbf{Format:} \LaTeX{} NIPS
+  \item \textbf{Code Style:} Will use suggested code style guidelines
+    (cookiecutter data science) with MIT open-source license.
+  \item \textbf{Programming Tools \& Hardware:} Python/Jupyter
+    Notebook, C++, NVIDIA Jetson Nano with Jetpack API.
+\end{itemize}
+
+\subsection{Proposed Project}
+
+I would like to use the probabilistic models and data analytics methods
+introduced in the paper [1] \textit{Using Inertial Sensors for Position
+and Orientation Estimation} to estimate the position and orientation
+(pose) of a users cell phone during an activity. Cell phone 3D
+accelerometer, gyroscope and magnetometer data will be obtained for
+analysis from the HMOG dataset associated with the article [2]
+\textit{HMOG: New Behavioral Biometric Features for Continuous
+Authentication of Smartphone Users}.
+
+\textbf{Here are the proposed techniques for data analytics discussed
+in [1] \textit{Using Inertial Sensors for Pose Estimation}:}
+
+\begin{itemize}
+  \item \textbf{(Ch2) Inertial Sensors:} Coordinate frames, angular
+    velocity, specific force, sensor error.
+  \item \textbf{(Ch3) Probabilistic Models:} Parameterizing/probabilistic
+    orientation modeling (Euler angles, Unit quaternions),
+    measurement/probabilistic models for pose estimation.
+  \item \textbf{(Ch4) Estimating Position and Orientation:} Smoothing
+    in optimized frame (Gauss-Newton estimation, uncertainty),
+    smoothing estimation of orientation using optimization, filtering
+    estimate of orientation using optimization, filtering estimate in
+    optimization framework, extended Kalman filtering / complementary
+    filtering.
+\end{itemize}
+
+\section*{References}
+
+\small
+
+[1] Manon Kok, Jeroen D. Hol and Thomas B. Schon (2017), Using
+Inertial Sensors for Position and Orientation Estimation,
+{\it Foundations and Trends in Signal Processing: Vol. 11: No. 1-2},
+pp 1-153. \\ \url{http://dx.doi.org/10.1561/2000000094}
+
+[2] SITOVÁ, Zdeňka, Jaroslav ŠEDĚNKA, Qing YANG, Ge PENG, Gang ZHOU,
+Paolo GASTI and Kiran BALAGANI. HMOG: New Behavioral Biometric Features
+for Continuous Authentication of Smartphone Users. {\it IEEE Transactions on
+Information Forensics and Security, 2016, Vol. 11, No. 5}, p. 877 - 892.
+ISSN 1556-6013. \\ \url{http://dx.doi.org/10.1109/TIFS.2015.2506542}
+
+\end{document}
