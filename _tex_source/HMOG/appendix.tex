@@ -1,0 +1,79 @@
+%
+\newpage
+\appendices
+
+
+\section{Security analysis of our BKG Scheme}
+\label{sec:security}
+%
+
+%
+
+We prove that our BKG technique meets the requirements from \cite{bal08}---namely, that 
+cryptographic keys are indistinguishable from random 
+given the commitment ({\em key randomness}), and that given a cryptographic key and a commitment, no 
+useful information about the biometric can be reconstructed ({\em biometric privacy}).
+We assume that the biometric is modeled by an unpredictable function. This captures the idea 
+that a user's biometric is {\em difficult to guess}. Informally, an 
+unpredictable function $f(\cdot)$ is a function for which no efficient adversary 
+can predict $f(x^*)$ given $f(x_i)$ for various $x_i \neq x^*$. Formally:
+
+\begin{definition}
+A function family $(\C, D, R, F)$ for $\{f_c(\cdot): D \rightarrow~R\}_{c \leftarrow \C}$ is unpredictable if for any efficient algorithm $\A$ and auxiliary information $z$ we have:
+\[
+	Pr[(x^*, f_c(x^*) \leftarrow \A^{f_c(\cdot)}(z) \text{\; and\; } x^* \not\in Q] \leq \operatorname{negl}(\kappa)
+\]
+where $Q$ is the set of queries from $\A$, $\kappa$ is the security parameter and $\operatorname{negl}(\cdot)$ is a negligible function.
+\label{def:unpredictable}
+\end{definition}
+
+In order to define security of biometric key generation systems, Ballard et al.~\cite{bal08} introduced the notions of \emph{Key Randomness} (REQ-KR), \emph{Weak Biometric Privacy} (REQ-WBP) and \emph{Strong Biometric Privacy} (REQ-SBP). 
+%
+%
+We formalize the notion of key randomness by defining Experiment $\operatorname{IND-KR}_\A(\kappa)$:
+
+\medskip
+\noindent 
+{\bf Experiment $\operatorname{IND-KR}_\A(\kappa)$} 
+
+\smallskip
+\begin{enumerate}
+	\item $\A$ is provided with a challenge $(\PRF_{c_i}(z|1), \delta)$, $k_b$ and $z$, where $k_0 = \PRF_{c_i}(z|0)$ and $k_1 \leftarrow_R \{0,1\}^\kappa$ for a bit $b \leftarrow_R \{0,1\}$, corresponding to user $i$.
+	\item $\A$ is allowed to obtain biometric information $x_j$ for arbitrary users $j$ such that $j\neq i$.
+	\item $\A$ outputs a bit $b'$ as its guess for $b$. The experiment outputs $1$ if $b = b'$, and $0$ otherwise. 
+\end{enumerate}
+
+\begin{definition}
+We say that a biometric key generation scheme has the Key Randomness property if there exist a negligible function $\operatorname{negl}(\cdot)$ such that for any PPT $\A$, $\operatorname{Pr}[\operatorname{IND-KR}_\A(\kappa) = 1] \leq 1/2+\operatorname{negl}(\kappa)$.
+\end{definition}
+
+\begin{theorem} \label{thm:key_randomness}
+Assuming that the $\PRF$ is a pseudo-random function family and that biometric $x = (x_1, ..., x_n)$ is unpredictable, our Fuzzy Commitment scheme has the Key Randomness property.
+\label{thm:REQ-KR}
+\end{theorem}
+
+\begin{proof}[Proof of Theorem \ref{thm:key_randomness} (Sketch)]
+%
+Because $c = x - \delta$, and $x$ is assumed to be unpredictable, $c$ is unpredictable given $\delta$. We now show that any PPT adversary $\A$ that has advantage $1/2+\Delta(\kappa)$ to win the $\operatorname{IND-KR_\A(\kappa)}$ experiment can be used to construct a distinguisher $\D$ that has similar advantage in distinguishing $\PRF$ from a family of uniformly distributed random functions.
+
+$\D$ is given access to oracle $O(\cdot)$ that selects a random codeword $c$ and a random bit $b$, and responds to a query $q$ with random (consistent) values if $b=1$, and with $\PRF_c(q)$ if $b=0$. 
+$\D$ selects a random $z$, a codeword $c'$ and a feature vector $x'$, and sets $\delta' = x' - c'$. Then $\D$ sends $\gamma' = (O(z|1), \delta')$ and $O(z|0)$ to $\A$. %
+
+%
+If $b=0$, then pair $(\gamma', \PRF_{c'}(z|0))$ is indistinguishable from $((\PRF_{c}(z|1), \delta), \PRF_{c}(z|0))$, because $\delta$ and $\delta'$ follow the same distribution, $c$ and $c'$ are unpredictable given $\delta$ and thus both $\PRF_{c}(\cdot)$ and $\PRF_{c'}(\cdot)$ are indistinguishable from random. 
+If $b=1$, then $O(\cdot)$ is a random oracle, so $(\gamma', O(z))$ is 
+indistinguishable from pair $((\PRF_c(z|1), \delta), \PRF_c(z|0))$: $c$ is 
+unpredictable given $\delta$,  therefore $\PRF_c(\cdot)$ is indistinguishable from 
+random. 
+ 
+Eventually, $\A$ outputs $b'$, and $\D$ outputs  $b'$ as its guess. It is easy to see that $\D$ wins iff $\A$ wins, so $\D$ is correct with probability $1/2+\Delta(\kappa)$. Therefore,  $\Delta(\cdot)$ must be a negligible function.\end{proof}
+
+REQ-WBP states that the adversary learns no useful information about a biometric 
+signal from the commitment and the auxiliary information, while REQ-SBP states 
+that the adversary learns no useful information about the biometric given 
+auxiliary information, the commitment and the key.
+For our BKG algorithms, REQ-SBP implies REQ-WBP. In fact, $\PRF_c(z|1)$ (which is part of the commitment) is known to the adversary, and therefore $k=\PRF_c(z|0)$ does not reveal any additional information. %
+%
+%
+From the unpredictability of $x$, it follows that the output of $\PRF_c$ does not reveal $c$, so $\PRF_c(z|1)$ and $k$ do not disclose information about $x$. 
+

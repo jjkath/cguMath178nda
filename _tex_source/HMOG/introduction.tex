@@ -1,0 +1,140 @@
+%
+%
+%
+%
+%
+%
+%
+%
+%
+
+Currently, popular smartphone authentication mechanisms such as PINs, graphical passwords, and fingerprint scans offer limited security. They are susceptible to guessing~\cite{pin_distribution} (or spoofing~\cite{iphone_fingerprint_spoof} in the case of fingerprint scans), and to side channel attacks such as smudge~\cite{AvivGMBS10}, reflection~\cite{XuH0MF13}, and video capture~\cite{ShuklaKSP14} attacks.
+Additionally, a fundamental limitation of PINs, passwords, and fingerprint scans is that they are well-suited for one-time authentication, 
+and therefore are commonly used to authenticate users at login. This renders them ineffective when the smartphone is accessed by an adversary after login. {\em Continuous}  {or \em active} authentication addresses these challenges by frequently and unobtrusively authenticating the user via behavioral biometric signals, such as touchscreen interactions~\cite{frank2013}, hand movements and gait~\cite{derawi2010, bo2013}, voice~\cite{LuBPKL11}, and phone location~\cite{shi2010}. 
+
+%
+
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+
+In this paper, we present Hand Movement, Orientation, and Grasp (HMOG), a new set of behavioral biometric features for continuous authentication of smartphone users. HMOG uses accelerometer, gyroscope, and magnetometer readings to unobtrusively capture subtle hand micro-movements and orientation patterns generated when a user taps on the screen. 
+%
+%
+
+
+HMOG features are founded upon two core building blocks of human prehension~\cite{Napier56}: {\em stability grasp}, which provides stability to the object being held; and {\em precision grasp}, which involves precision-demanding tasks such as tapping a target. We view the act of \textit{holding a phone} as a stability grasp and the act of \textit{touching targets on the touchscreen} as a precision grasp. We hypothesize that the way in which a user ``distributes'' or ``shares'' stability and precision grasps while interacting with the smartphone results in distinctive movement and orientation behavior. The rationale for our hypothesis comes from the following two bodies of research.
+
+First, there is evidence~(see \cite{Karlson06,Azenkot2012,Wobbrock2008}) that users have postural preferences for interacting with hand-held devices such as smartphones. Depending upon the postural preference, it is possible that the user can have her own way of achieving stability and precision---for example, the user can achieve both stability and precision with one hand if the postural preference involves holding and tapping the phone with the same hand; or distribute stability and precision between both hands, if the posture involves using both hands for holding and tapping; or achieve stability with one hand and precision with the other. %
+
+ %
+
+Second, studies in ergonomics, biokinetics, and human-computer interaction have reported that handgrip strength strongly correlates with an individual's physiological and somatic traits like hand length, handedness, age, gender, height, body mass, and musculature (see, e.g.,  \cite{fiebert1998relationship,chatterjee1991comparison,kim2006hand}). If the micro-movements caused by tapping reflect an individual's handgrip strength, then the distinctiveness of HMOG may have roots, at least in part, in an individual's distinctive physiological and somatic traits.
+
+Motivated by the above, we designed 96 HMOG features and evaluated their {\em continuous user authentication} and {\em biometric key generation} performance during typing. Because walking has been shown to affect typing performance~\cite{MizobuchiCN05}, we evaluated HMOG under both walking and sitting conditions. 
+
+
+
+
+%
+
+%
+
+%
+%
+
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+\subsection{Contributions and Novelty of This Work}
+%
+
+\paragraph{New HMOG Features for Continuous Authentication} 
+We propose two types of HMOG features: {\em resistance features}, which measure the micro-movements of the phone in response to the forces exerted by a tap gesture; and {\em stability features}, which measure how quickly the perturbations in movement and orientation, caused by tap forces, dissipate. %
+Our extensive evaluation of HMOG features on a dataset  of 100 users\footnote{We made the dataset available at \url{http://www.cs.wm.edu/~qyang/hmog.html}. We also described the data and its release in \cite{qingPoster}.} who typed on the smartphone led to the following findings: (1)~HMOG features extracted from accelerometer and gyroscope signals outperformed HMOG features from magnetometer;
+%
+(2) Augmenting HMOG features with tap characteristics (e.g., tap duration and contact size) lowered equal error rates (EERs): from 14.34\% to 11.41\% for sitting, and from 14.73\% to 8.53\% for walking.
+This shows that combining tap information with HMOG features considerably improves authentication performance; and (3) HMOG features complement tap and keystroke dynamics features, especially for low authentication latencies at which tap and keystroke dynamics features fare poorly. For example, for 20-second authentication latency, adding HMOG to tap and keystroke dynamics features reduced the equal error rate from 17.93\% to 11.74\% for walking and from 19.11\% to 15.25\% for sitting.
+%
+
+\paragraph{Empirical Investigation Into Why HMOG Authentication Performs Well During Walking}  HMOG features achieved lower authentication errors (13.62\% EER) for walking compared to sitting (19.67\% EER). We investigated why HMOG had a superior performance during walking by comparing the performance of HMOG features {\em during} taps and {\em between} taps (i.e., the segments of the sensor signal that lie between taps). Our results suggest that the higher authentication performance %
+during walking can be attributed to the ability of HMOG features to capture distinctive 
+%
+movements caused by walking in addition to micro-movements caused by taps. %
+
+
+
+
+\paragraph{BKG with HMOG Features} 
+%
+BKG is closely related to authentication, but has a different objective: to 
+provide cryptographic access control to sensitive data on the smartphone. We 
+believe that designing a secure BKG scheme on smartphones is very important, 
+because the adversary is usually assumed to have physical access to the device, 
+and therefore cryptographic keys must not be stored on the smartphone's memory---but rather generated from biometric signals and/or passwords.
+
+To our knowledge, we are the first to evaluate BKG on smartphones. We instantiated BKG using normalized generalized Reed-Solomon codes in Lee metric. (See section~\ref{sec:bkg} for formulation and evaluation.) We compared BKG on HMOG to BKG on tap, key hold, and swipe features under two metrics: equal error rate (EER) and guessing distance. 
+
+Our results on BKG can be summarized as follows: we achieved lower EERs with HMOG features compared to key hold, tap, and swipe features in both walking and sitting conditions. For walking, EER of HMOG-based BKG was 17\%, vs. 29\% with key hold and 28\% with tap features. By combining HMOG and tap features, we achieved 15.1\% EER. For sitting, we obtained an EER of 23\% with HMOG features, 26\% with tap features, and 20.1\% by combining both. In contrast, we obtained 34\% EER with swipes. HMOG features also provided higher guessing distance (i.e., 2.9 for walking, and 2.8 for sitting) than all other features extracted from our dataset (1.9 for taps and for key holds in walking and 1.6 for taps in sitting conditions). 
+
+
+\paragraph{Energy Consumption Analysis of HMOG Features}
+Because smartphones are energy constrained, it is crucial that a continuous user authentication method consumes as little energy as possible, while maintaining the desired level of authentication performance. To evaluate the feasibility of HMOG features for continuous authentication on smartphones, we measured the energy consumption of accelerometer and gyroscope, sampled at 100Hz, 50Hz, 16Hz and 5Hz. We then measured the energy required for HMOG feature computation from sensor signals, and reported the tradeoff between energy consumption and EER. 
+
+
+Our analysis shows that a balance between authentication performance and energy overhead can be achieved by sampling HMOG features at 16Hz. The energy overhead with 16Hz is 7.9\%, compared to 20.5\% with 100Hz sampling rate, but comes with minor increase (ranging from 0.4\% to 1.8\%) in EERs. However, by further reducing the sampling rate to 5Hz, we observed a significant increase in EER (11.0\% to 14.1\%). %
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+
+
+
+\subsection{Organization}
+We present the description of HMOG features in Section \ref{sectionFeatures}, and details on our dataset in Section \ref{sectionDataset}. In sections \ref{sectionExperiments} and \ref{sectionResults}, we describe the authentication experiments and present results. We introduce and evaluate BKG on HMOG in Section \ref{sec:bkg}. We analyze the energy consumption of HMOG features in Section \ref{sec:power}. In Section \ref{relatedResearch}, we review related research.  We conclude in Section \ref{sec:conclusion}.
+
+

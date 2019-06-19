@@ -1,0 +1,147 @@
+%
+
+
+\begin{table*}[t]
+\caption{Comparison of our authentication experiments with related work on smartphone tap/typing authentication.}
+\centering
+\resizebox{1\textwidth}{!}{
+
+\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
+\hline
+Work  & Condition        & \begin{tabular}{@{}l@{}}  Free text \end{tabular} & {Motion-based features}  &  \begin{tabular}{@{}l@{}}  Tap features \end{tabular} &  \begin{tabular}{@{}l@{}}  Keystroke \\ features \end{tabular} & \begin{tabular}{@{}l@{}}  Authentication \\ vector \end{tabular} &  \begin{tabular}{@{}l@{}} \# of \\ owners \end{tabular} & \begin{tabular}{@{}l@{}}Avg. \# of \\ impostors \\ per owner\end{tabular} & Verifier                                        & \begin{tabular}{@{}l@{}}  Training \\data source  \end{tabular}              & Best FAR                           & Best FRR              \\ \hline
+Trojahn et al.~\cite{trojahn2012} & sit          & \xmark       & \xmark        &  \begin{tabular}{@{}l@{}}  pressure, \\ contact size \end{tabular} &  digraph & \begin{tabular}{@{}l@{}}  avg. of 7 samples \end{tabular}          & 35                & 34                                    & ANN                                             & {unknown}                         & 9.53\%                               & 5.88\%                  \\ \hline
+Li et al.~\cite{li2013unobservable} & \multicolumn{2}{c|}{regular smartphone usage}       & \xmark        &  \parbox{2cm}{pressure, touch area, duration} &  \xmark & avg. of 2--20 gestures          & 28                & up to 47                                    & \parbox{1.5cm}{SVM (Gaussian kernel)}                                        & \begin{tabular}{@{}l@{}}owner \& \\impostor\end{tabular}                         & \multicolumn{2}{c|}{not reported for taps}                \\ \hline
+Zheng et al.\cite{zheng2012}   & sit           & \xmark        & \begin{tabular}{@{}l@{}} min, max and mean of accele-\\ration and angular velocity at \\press, release of each PIN digit    \end{tabular}      &  \parbox{2cm}{pressure, contact size (both at \linebreak press and release)} &  \begin{tabular}{@{}l@{}}  key hold, \\ key interval \end{tabular} & each tap             & 80                & 79                                    & \begin{tabular}{@{}l@{}}  dissimilarity \\ score \end{tabular}                            & owner                       & \multicolumn{2}{c|}{EER = 3.65\%}             \\ \hline
+Feng et al.~\cite{feng2013}    & sit        & \xmark         & \xmark       &   pressure   &  \begin{tabular}{@{}l@{}}  key hold,  \\ key interval \end{tabular} & \begin{tabular}{@{}l@{}}  5-60  char. window  \end{tabular}          & 40                & 39                                    & \begin{tabular}{@{}l@{}}  decision tree, \\ Bayesian \\ networks, \\random forest \end{tabular} & \begin{tabular}{@{}l@{}}owner \& \\impostor\end{tabular}                        & \multicolumn{2}{c|}{EER = 1\%}\\ \hline
+Gascon et al.~\cite{gascon2014}   & sit           & \xmark        & \begin{tabular}{@{}l@{}} accelerometer, gyroscope, and \\ orientation features extracted\\ during  typing burst\end{tabular}       &  \xmark & \xmark & \begin{tabular}{@{}l@{}}  features extracted \\ from time window \end{tabular}            & 12                & 303                                   & linear SVM                                      & \begin{tabular}{@{}l@{}}owner \& \\impostor\end{tabular}                           & \begin{tabular}{@{}l@{}}  \parbox{1.95cm}{1\% (4 genuine  users)} \end{tabular}         & \begin{tabular}{@{}l@{}}  \parbox{1.4cm}{8\%  (4 genuine  users)} \end{tabular} \\ \hline
+%
+Bo et al.~\cite{bo2013}      & \begin{tabular}{@{}l@{}}  sit, walk \end{tabular}  & \cmark       & \begin{tabular}{@{}l@{}}  mean magnitude of acceleration\\ and angular velocity during tap  \end{tabular}        &  \begin{tabular}{@{}l@{}}  \parbox{1.9cm}{coordinate, pressure, duration} \end{tabular} &  \xmark & \begin{tabular}{@{}l@{}}  each gesture, \\ judgement after  \\ 1-13 gestures \end{tabular}            & 10                & 50                                    & SVM                                             & \begin{tabular}{@{}l@{}} owner only, \\ and owner \& \\ impostor \end{tabular} & \begin{tabular}{@{}l@{}}  0\% when trained \\with owner \& \\ impostor data, 24.99\% \\ with owner data   \end{tabular}     & \begin{tabular}{@{}l@{}}  0\% when \\ trained with \\owner data \end{tabular} \\ \hline
+This work & \begin{tabular}{@{}l@{}}  sit, walk \end{tabular}  & \cmark      & \begin{tabular}{@{}l@{}}  60 resistance and 36 stability\\ features extracted from tap, \\using accelerometer, gyroscope\\ and magnetometer \end{tabular}   &  \parbox{1.95cm}{contact size (9 f.),  duration, velocity between two taps} &  \begin{tabular}{@{}l@{}}  key hold, \\ digraph \end{tabular} & \begin{tabular}{@{}l@{}} taps averaged \\ in time window \\ (20, 40, 60, 80, \\ 100, 120, 140 s.) \end{tabular}             & 90                & \begin{tabular}{@{}l@{}}99 sit \\ 93 walk \end{tabular}               &  \begin{tabular}{@{}l@{}} SM, SE, \\ 1-class SVM  \end{tabular}                           & owner                      & \multicolumn{2}{c|}{EER = 7.16\%}                  \\ \hline
+\end{tabular}
+
+
+}
+\label{tab:relatedResearch}
+\end{table*}
+
+\section{Related Work} \label{relatedResearch}
+
+\paragraph{Evolution of Continuous Authentication in Desktops and Mobile Phones}
+The need to periodically authenticate the user after login, combined with the fact that behavioral biometric traits can be collected without interrupting the user, led to promising research in the area of continuous authentication. Early work in the field used keystroke dynamics~\cite{Gunetti:2005:KAF:1085126.1085129, Dowland:2002:KAM:647185.719834, Monrose:1997:AVK:266420.266434, dowland2002keystroke} to authenticate desktop users. Later studies on desktop users demonstrated the feasibility of using a variety of behavioral traits, including mouse dynamics~\cite{shen2013user}, soft-biometrics~\cite{5570993}, hand movement~\cite{6879297}, keyboard acoustics~\cite{6966780}, screen fingerprints~\cite{Fathy2014122},  language use~\cite{stolerman11active, pokhriyal2014use} and cognition during text production~\cite{locklear2014, monaco2012, stewart2011, monaco2013}.
+
+%
+Early studies in continuous authentication of mobile phone users focused on keystroke dynamics (see~\cite{clarke2007,clarke2007109,buchoux2008,maiorana2011,campisi2009}),  because these devices had a hardware keyboard to interface with the user. However, as mobile phones evolved into ``smartphones'',  research in this area has been reshaped to leverage the multitude of available sensors  on these devices (e.g., touchscreen, accelerometer, gyroscope, magnetometer, camera, and GPS). Two behavioral traits have been predominantly explored in the smartphone domain, (1) gait (see, e.g.,~\cite{frank2013,serwadda2013}), and (2) touchscreen interaction (see, e.g.,~\cite{derawi2010,vildjiounaite2006}). More recently, research has focused on  leveraging multi-modal behaviors (e.g.,~\cite{bo2013,Weidong2011}).
+%
+
+%
+%
+%
+%
+
+\paragraph{Continuous Authentication Using Taps}
+%
+%
+%
+Because HMOG features are collected during taps, we review existing work that uses tap activity to authenticate smartphone users. %
+In Table~\ref{tab:relatedResearch}, we summarize the state-of-the-art in tap-based authentication, and highlight various aspects of each work, such as: (1) how the taps were collected---did the user compose free-text or type predefined fixed-text; (2) which body motion conditions (e.g., sitting and walking) were considered; (3) number of subjects (partitioned into owners and impostors, wherever appropriate); (4) how the verifier was trained; (5) how the authentication vector was created; and (6) the features used (e.g., motion-sensor, tap, or keystroke-based). %
+
+
+
+
+Among previous papers~\cite{zheng2012,gascon2014,bo2013}, which have used motion sensors for user authentication, Zheng et al.~\cite{zheng2012} used fixed pins while Gascon et al.~\cite{gascon2014} used fixed phrases. The only work that used free-text typing and also the only one to authenticate users under walking condition is the paper by Bo et al.~\cite{bo2013}. Therefore, we believe that this is closest work to our paper, and highlight the differences between our paper and~\cite{bo2013} as follows: (1) we performed experiments on a large-scale dataset containing 100 users (90 users qualified as genuine, and  93 or more as impostors), while \cite{bo2013} used only 10 genuine users and 50 impostors (on average) from a dataset of 100 subjects. Because the genuine population size in \cite{bo2013} is too small, it is difficult to assess how accurately the reported FARs/FRRs represent the achievable authentication error rates with movement-based features, given that the number of users is a critical factor in assessing the confidence on empirical error rates of biometric systems~\cite{DassZJ06}; 
+(2) we introduced and evaluated a wide range of movement features, while~\cite{bo2013} used only two (i.e., mean magnitude of acceleration and mean magnitude of angular velocity, during a gesture). Our results clearly reveal that certain types of movement features (e.g., resistance) perform better than others (e.g., stability), while~\cite{bo2013} does not distinguish between different types of movement features; (3) our evaluation is comprehensive and includes detailed comparison and fusion with additional features such as touchscreen tap and keystroke. This allowed us to report how fusion with different types of features impacted authentication and BKG performance. In contrast,~\cite{bo2013} do not compare different types of features; and (4) HMOG features performed well in both sitting and walking condition, while~\cite{bo2013} had resorted to gait features for authentication during walking.
+
+%
+
+%
+
+%
+ 
+ %
+%
+ %
+%
+%
+%
+
+%
+%
+%
+%
+%
+%
+%
+%
+
+%
+%
+%
+%
+%
+
+%
+
+%
+
+%
+%
+%
+%
+
+
+
+\paragraph{Biometric Key Generation} 
+To our knowledge, there is no previous work on BKG on smartphones. Here, we review some important work related to BKG in general. 
+
+Introduced by Juels et al.~\cite{fuzzy_commitment}, BKG implemented via fuzzy commitments uses error correcting codes to construct cryptographic keys from noisy information. 
+Features are extracted from raw signals (e.g., minutiae from fingerprint images); 
+then, each feature is encoded using a single bit. Cryptographic keys are {\em committed} using features; subsequently, commitments are opened using biometric signals from the same users. Error-correcting techniques are 
+applied to noisy biometric information in order to cope with within-user variance.%
+
+%
+%
+%
+%
+%
+%
+
+
+%
+%
+%
+%
+%
+
+Ballard et al.~\cite{bal08} provided a formal framework for analyzing the security of a BKG scheme, and argued that BKG should enjoy biometric privacy (i.e., biometric signals cannot be reconstructed from biometric keys) and key randomness (i.e., keys look random given their commitment). They also formalized adversarial knowledge of the biometric by introducing \emph{guessing distance}---the logarithm of the number of guesses necessary to open a commitment using feature vectors from multiple impostors.
+
+%
+%
+%
+%
+%
+%
+%
+
+
+ %
+
+\paragraph{Energy Consumption Analysis}
+Bo et al.~\cite{bo2013} showed that energy consumption can be reduced by selectively turning off motion 
+sensors based on two factors: (1) the sensitivity of the app being used---non-sensitive applications, such as games, require no authentication; and (2) the probability that the smartphone is handed to another user. This probability is calculated using historical smartphone usage data. 
+In their experiments, Bo et al.~were able to turn off the sensors 30-90\% of the time, while maintaining reasonable authentication performance. However, they did not report how they performed energy consumption measurements, nor listed the  
+energy consumptions associated with determining if the phone was being held by its owner or handed to another user. 
+
+Feng et al.~\cite{Feng:2014:TCI:2565585.2565592} introduced TIPS---a continuous user authentication technique that relies on touch features exclusively. By collecting energy usage data, the authors reported average energy consumption of 88 mW, which corresponds to less than 6.2\% overhead. Like~\cite{bo2013},  Feng et al.~\cite{Feng:2014:TCI:2565585.2565592} also do not describe how energy measurements were performed.
+
+Khan et al.~presented Itus \cite{Khan:2014:IIA:2639108.2639141}, a framework that helps Android application developers to deploy various continuous authentication mechanisms. Energy evaluation was performed using PowerTutor~\cite{PowerTutor}---an Android application that reports energy measurements performed by the smartphone. Overall energy overhead of the tested continuous authentication techniques varied between 1.2\% and 6.2\%. 
+
+ Compared to previous research, our work provides a more complete picture of 
+energy overhead of continuous authentication using HMOG. In fact, we highlighted 
+the tradeoffs of energy usage for different sensor sampling rates and 
+authentication scan lengths, versus authentication accuracy. In comparison to our work, existing literature did not analyze fine-grained energy consumption brought by individual components such as motion sensors. 
+To our knowledge, we are the first to report 
+the relationship between sensor sampling rates and continuous 
+authentication accuracy.
+
+%
+%
