@@ -21,6 +21,9 @@
 \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 \usepackage{microtype}      % microtypography
 
+\usepackage{graphicx}
+\usepackage{caption}
+
 \title{Reading Summary 1 - HMOG: New Behavioral Biometric Features for Continuous Authentication of Smartphone Users}
 
 \author{
@@ -35,58 +38,120 @@
 % \begin{abstract}
 % \end{abstract}
 
-\section{Project Overview}
+\section{HMOG Paper Summary}
+
+NOTE: Reading summary is a restatement of material from reference [1].
 
 \subsection{Description}
 
-\textbf{Project Type (1)}
+The authors introduce {\em Hand Movement, Orientation, and Grasp} (HMOG), a set of behavioral features to continuously authenticate smartphone users. HMOG features unobtrusively capture subtle micro-movement and orientation dynamics resulting from how a user grasps, holds, and taps on the smartphone.
 
-\begin{enumerate}
-  \item Application of existing algorithm to a new problem and
-    potentially new data.
-\end{enumerate}
+Data from 100 subjects was collected under two conditions: sitting and walking. Authentication EERs as low as 7.16\% (walking) and 10.05\% (sitting) were achieved with combined HMOG, tap, and keystroke features. Experiments to investigate why HMOG features perform well during walking were conducted.
 
-\subsection{Requirements}
+With BKG (Bimetric Key Generation), the authors achieved EERs of 15.1\% using HMOG combined with taps. In comparison, BKG using tap, key hold, and swipe features had EERs between 25.7\% and 34.2\%.
 
-\begin{itemize}
-  \item \textbf{Partner:} Work independently.
-  \item \textbf{Dataset:} HMOG cell phone data from at least five
-    users/activities. Will apply data analytics and ML methods using
-    accelerometer, gyroscope and magnetometer data (3-axis each).
-  \item \textbf{Format:} \LaTeX{} NIPS
-  \item \textbf{Code Style:} Will use suggested code style guidelines
-    (cookiecutter data science) with MIT open-source license.
-  \item \textbf{Programming Tools \& Hardware:} Python/Jupyter
-    Notebook, C++, NVIDIA Jetson Nano with Jetpack API.
-\end{itemize}
+\subsection{Introduction}
 
-\subsection{Proposed Project}
+In this paper, the authors present Hand Movement, Orientation, and Grasp (HMOG), a new set of behavioral biometric features for continuous authentication of smartphone users. HMOG uses accelerometer, gyroscope, and magnetometer readings to unobtrusively capture subtle hand micro-movements and orientation patterns generated when a user taps on the screen. 
 
-I would like to use the probabilistic models and data analytics methods
-introduced in the paper [1] \textit{Using Inertial Sensors for Position
-and Orientation Estimation} to estimate the position and orientation
-(pose) of a users cell phone during an activity. Cell phone 3D
-accelerometer, gyroscope and magnetometer data will be obtained for
-analysis from the HMOG dataset associated with the article [2]
-\textit{HMOG: New Behavioral Biometric Features for Continuous
-Authentication of Smartphone Users}.
+Motivated by the above, they designed 96 HMOG features and evaluated their {\em continuous user authentication} and {\em biometric key generation} performance during typing. Because walking has been shown to affect typing performance, they evaluated HMOG under both walking and sitting conditions. 
 
-\textbf{Here are the proposed techniques for data analytics discussed
-in [1] \textit{Using Inertial Sensors for Pose Estimation}:}
+\paragraph{New HMOG Features for Continuous Authentication} 
+Two types of HMOG features are proposed: {\em resistance features}, which measure the micro-movements of the phone in response to the forces exerted by a tap gesture; and {\em stability features}, which measure how quickly the perturbations in movement and orientation, caused by tap forces, dissipate. %
 
-\begin{itemize}
-  \item \textbf{(Ch2) Inertial Sensors:} Coordinate frames, angular
-    velocity, specific force, sensor error.
-  \item \textbf{(Ch3) Probabilistic Models:} Parameterizing/probabilistic
-    orientation modeling (Euler angles, Unit quaternions),
-    measurement/probabilistic models for pose estimation.
-  \item \textbf{(Ch4) Estimating Position and Orientation:} Smoothing
-    in optimized frame (Gauss-Newton estimation, uncertainty),
-    smoothing estimation of orientation using optimization, filtering
-    estimate of orientation using optimization, filtering estimate in
-    optimization framework, extended Kalman filtering / complementary
-    filtering.
-\end{itemize}
+\paragraph{Empirical Investigation Into Why HMOG Authentication Performs Well During Walking}  HMOG features achieved lower authentication errors (13.62\% EER) for walking compared to sitting (19.67\% EER). The authors investigated why HMOG had superior performance during walking by comparing the performance of HMOG features {\em during} taps and {\em between} taps (i.e., the segments of the sensor signal that lie between taps). Results suggest that the higher authentication performance %
+during walking can be attributed to the ability of HMOG features to capture distinctive 
+%
+movements caused by walking in addition to micro-movements caused by taps. %
+
+\paragraph{BKG with HMOG Features} 
+%
+BKG is closely related to authentication, but has a different objective: to 
+provide cryptographic access control to sensitive data on the smartphone. Because the adversary is usually assumed to have physical access to the device, cryptographic keys must not be stored on the smartphone's memory---but rather generated from biometric signals and/or passwords.
+
+Results on BKG can be summarized as follows: the authors achieved lower EERs with HMOG features compared to key hold, tap, and swipe features in both walking and sitting conditions. For walking, EER of HMOG-based BKG was 17\%, vs. 29\% with key hold and 28\% with tap features. By combining HMOG and tap features, the authors achieved 15.1\% EER. For sitting, an EER of 23\% with HMOG features, 26\% with tap features, and 20.1\% by combining both. In contrast, an ERR of 34\% was obtained with swipes.
+
+\paragraph{Energy Consumption Analysis of HMOG Features}
+Analysis shows that a balance between authentication performance and energy overhead can be achieved by sampling HMOG features at 16Hz. The energy overhead with 16Hz is 7.9\%, compared to 20.5\% with 100Hz sampling rate, but comes with minor increase (ranging from 0.4\% to 1.8\%) in EERs.
+
+\begin{figure}[t]
+  \includegraphics[width=1\linewidth]{plots_R/auth_hmog_all_verifiers_new.pdf}
+  \caption[]{Comparison of HMOG features in sitting and walking conditions for three verifiers. The reported EERs are with PCA for SE, and for SVM-sitting; and without PCA for SM and SVM-walking. $X$-axis shows authentication time in seconds.}
+  %
+  \label{fig:hmogAllVerifiersSitWalk}
+\end{figure}
+  
+\begin{figure}[t]
+  \includegraphics[width=1\linewidth]{plots_R/auth_compare_all_single.pdf}
+  \caption[]{Comparison of EERs of HMOG with keystroke dynamics (i.e., key hold and digraph) and tap features with SM verifier. $X$-axis shows authentication time in seconds.} %
+  \label{fig:walkVSsitAllSM}
+\end{figure}
+
+\subsection{Design of Authentication Experiments} \label{authenticationExperiments}
+
+\paragraph{1-Class Verifiers} Verification experiments using three verifiers were employed: scaled Manhattan (SM), scaled Euclidian (SE), and 1-class support vector machine SVM.
+
+\paragraph{Training and Testing}  For experiments in sitting and walking conditions, the authors used the first two sessions for training and the remaining two for testing. They extracted HMOG features during each tap. Thus, each training/testing vector corresponded to one tap. With keystroke dynamics features, each training/testing vector corresponded to one key press on the virtual keyboard.%
+
+\paragraph{Quantifying Authentication Performance}
+The authors generated two types of scores, genuine (authentication vector was matched against template of the same user) and zero-effort impostor (authentication vector of one user was matched against the template of another). they used population equal error rate (EER) to measure the authentication performance.
+
+\paragraph{Score-level Fusion}
+To determine whether HMOG features complement existing feature sets, the authors combined tap, key hold, digraph and HMOG features using weighted sum score-level fusion.
+
+\paragraph{Parameter selection}
+The authors used 10-fold cross-validation (10-CV) on training data to choose feature selection method (mRMR or Fisher score ranking), as well as to set the parameters for feature selection, principle component analysis PCA, and SVM. They evaluated all parameters independently for each combination of feature set, verifier, authentication scan-length and body-motion condition.
+
+\paragraph{Feature Selection} 
+%
+During training, the authors evaluated two feature selection methods: Fisher score ranking, 
+and minimum-Redundancy Maximum-Relevance (mRMR). 
+Preliminary experiments showed that Fisher score performed better for HMOG features, while mRMR performed well with tap features. With key hold and digraph features, the best performing feature set contained all the features.
+
+\begin{table*}[!htbp]
+  %
+  \caption{Summary of Lowest EERs achieved using only HMOG features.}%
+  \centering
+  %
+  \begin{tabular}{| c | c | c | c | c |} %
+  \hline
+  %
+  %
+  Verifier & Best Performing Features & Sensors & Sitting & Walking \\ \hline  %
+  % 
+  Scaled Manhattan & With Fisher Score Ranking & Acc + Gyr & 19.67\% & 13.62\%  \\ \hline %
+  % 
+  Scaled Euclidean & With PCA, no Feature Selection	& Acc + Gyr	& 25\% & 15.31\% \\ \hline %
+  % 
+  1-Class SVM & With Fisher Score Ranking & Acc + Gyr	& 27.45\% & 15.71\% \\ %
+    & with PCA for sitting & 	&  & \\ %
+    & without PCA for walking & 	&  & \\ \hline %
+  % 
+  \end{tabular}
+  \label{tab:individualperformance}
+  %
+  \vspace{12pt}
+  %
+\end{table*}
+
+\paragraph{EERs vs.~Energy Consumption} 
+EERs for 16Hz 
+sampling rate are comparable to those of 50Hz and 100Hz for both sitting and walking, while the EERs for 5Hz are 
+considerably worse than 16Hz, 50Hz, and 100Hz. 
+
+On the other hand, energy overhead over the baseline is low (between 
+6.2\% and 7.9\%) for 5Hz and
+16Hz sampling rates and, in comparison, high (between 12.8\% and 20.5\%) for 50Hz 
+and 100Hz. 
+%
+Thus, during the active authentication with HMOG, the authors chose 16Hz instead of 
+100Hz as the sensor sampling rate, which would lower the energy overhead of 
+sensor data collection by about 60\% without sacrificing EER. 
+
+\subsection{Summary}
+
+In this paper, the authors introduced HMOG, a set of behavioral biometric features for continuous 
+authentication of smartphone users.  They evaluated HMOG from three perspectives---continuous authentication, BKG, and energy consumption. Evaluation was performed on multi-session data collected from 100 subjects under two motion conditions (i.e., sitting and walking). Results can be summarized as follows. By combining HMOG with tap features, the authors achieved 8.53\% authentication EER during walking and 11.41\% during sitting, which is lower than the EERs achieved individually with tap or HMOG features. Further, by fusing HMOG, tap and keystroke dynamic features, they achieved the lowest EERs (7.16\% in walking and 10.05\% in sitting).
 
 \section*{References}
 
