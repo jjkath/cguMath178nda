@@ -387,7 +387,64 @@ While at steady state, a filter is used such that accelerometers track and elimi
 
 \subsection{Matlab Sensor Fusion and Tracking Toolbox}
 
-The Matlab Ahrsfilter and Imufilter algorithms were used to estimate orientation for 9 HMOG cell phone users 24 sessions each. Results for 3 users (single session each) are shown below.
+The Matlab Ahrsfilter and Imufilter algorithms were used to estimate orientation for 9 HMOG cell phone users 24 sessions each. Result images for 3 users (single session each) are shown in section four.
+
+\textbf{Filter Descriptions}
+
+\textit{FUSE = imufilter} returns an indirect Kalman filter System object, FUSE, for fusion of accelerometer and gyroscope data to estimate device orientation. The filter uses a nine-element state vector to track error in the orientation estimate, the gyroscope bias estimate, and the linear acceleration estimate.
+
+\textit{FUSE = ahrsfilter} returns an indirect Kalman filter System object, FUSE, for sensor fusion of accelerometer, gyroscope, and magnetometer data to estimate device orientation and angular velocity. The filter uses a 12-element state vector to track the estimation error for the orientation, the gyroscope bias, the linear acceleration, and the magnetic disturbance.
+
+The Ahrsfilter algorithnm provides a better estimate of orientation because the addition of magnetometer measurements allow for correcting gyroscope bias/drift. Generally, the Ahrsfilter orientation z-axis exhibits less variance and appears to be stabilized vs Imufilter orientation z-axis. On the other hand, the orientation y-axis and x-axis appear to be very close generally for both filters.
+
+\subsection{Python Scikit Kinematics Library}
+
+The scikit kinematics Kalman, Madgwick and Mahony filtering algorithms were used to estimate orientation for 3 HMOG cell phone users single session each. Result images for 3 users (single session each) are shown in section four.
+
+\textbf{Filter Descriptions}
+
+NOTE: all three filters use accelerometer, gyroscope and magnetometer measurements to estimate orientation.
+
+\textit{Kalman} Calculate the orientation from IMU data.
+
+\textit{Madgwick} Madgwick’s gradient descent filter.
+
+\textit{Mayhony} Madgwick’s implementation of Mayhony’s AHRS algorithm.
+
+The Madgwick and Mayhony algorithms give similar results and generally give better orientation estamates than
+the kalman filtering algorithm. The former fuse magnetometer measurements to correct for gyro error resulting
+in a better attitude estimation.
+
+\subsection{Conclusion and further work}
+
+The Matlab SF\&T and scikit kinematics filtering algorithms did a nice job of orientation estimation for cell phone users.
+
+For future work, I would like to implementing a basic 3D Kalman filtering algorithm and explore the error covariance matrix in more detail.
+
+\section*{References}
+
+\small
+
+[1] Manon Kok, Jeroen D. Hol and Thomas B. Schon (2017), Using
+Inertial Sensors for Position and Orientation Estimation,
+{\it Foundations and Trends in Signal Processing: Vol. 11: No. 1-2},
+pp 1-153. \\ \url{http://dx.doi.org/10.1561/2000000094}
+
+[2] SITOVÁ, Zdeňka, Jaroslav ŠEDĚNKA, Qing YANG, Ge PENG, Gang ZHOU,
+Paolo GASTI and Kiran BALAGANI. HMOG: New Behavioral Biometric Features
+for Continuous Authentication of Smartphone Users. {\it IEEE Transactions on
+Information Forensics and Security, 2016, Vol. 11, No. 5}, p. 877 - 892.
+ISSN 1556-6013. \\ \url{http://dx.doi.org/10.1109/TIFS.2015.2506542}
+
+[3] MATLAB Sensor Fustion and Tracking Toolbox. \\ \url{https://www.mathworks.com/help/fusion/}
+
+[4] Scikit Kinematics Library. \\ \url{http://work.thaslwanter.at/skinematics/html}
+
+[5] Open Source Sensor Fusion. \\ \url{https://github.com/memsindustrygroup/Open-Source-Sensor-Fusion/tree/master/docs}
+
+[6] “Design, Implementation, and Experimental Results of a Quaternion-Based Kalman Filter for Human Body Motion Tracking” Yun, X. and Bachman, E.R., IEEE TRANSACTIONS ON ROBOTICS, VOL. 22, 1216-1227 (2006)
+
+\section{Analysis Images}
 
 \begin{figure}[ht] %t
   \includegraphics[width=1\linewidth]{images/151985_2_acc_mag_gyr_data.png}
@@ -402,14 +459,6 @@ The Matlab Ahrsfilter and Imufilter algorithms were used to estimate orientation
   %
   \label{fig:151985_2_compare_filter}
 \end{figure}
-
-\textbf{Filter Descriptions}
-
-\textit{FUSE = imufilter} returns an indirect Kalman filter System object, FUSE, for fusion of accelerometer and gyroscope data to estimate device orientation. The filter uses a nine-element state vector to track error in the orientation estimate, the gyroscope bias estimate, and the linear acceleration estimate.
-
-\textit{FUSE = ahrsfilter} returns an indirect Kalman filter System object, FUSE, for sensor fusion of accelerometer, gyroscope, and magnetometer data to estimate device orientation and angular velocity. The filter uses a 12-element state vector to track the estimation error for the orientation, the gyroscope bias, the linear acceleration, and the magnetic disturbance.
-
-The Ahrsfilter algorithnm provides a better estimate of orientation because the addition of magnetometer measurements allow for correcting gyroscope bias/drift. Generally, the Ahrsfilter orientation z-axis exhibits less variance and appears to be stabilized vs Imufilter orientation z-axis. On the other hand, the orientation y-axis and x-axis appear to be very close generally for both filters.
 
 \begin{figure}[ht]
   \includegraphics[width=1\linewidth]{images/501973_12_acc_mag_gyr_data.png}
@@ -439,61 +488,46 @@ The Ahrsfilter algorithnm provides a better estimate of orientation because the 
   \label{fig:984799_23_compare_filter}
 \end{figure}
 
-\subsection{Python Scikit Kinematics Library}
+\begin{figure}[ht] %t
+  \includegraphics[width=1\linewidth]{images/151985_2_madgwickfilter.png}
+  \caption[]{scikit kinematics AHRS Madgwick filter.}
+  %
+  \label{fig:151985_2_madgwick}
+\end{figure}
 
+\begin{figure}[ht]
+  \includegraphics[width=1\linewidth]{images/151985_2_mahonyfilter.png}
+  \caption[]{scikit kinematics AHRS Mahony filter.}
+  %
+  \label{fig:151985_2_mahony}
+\end{figure}
 
+\begin{figure}[ht] %t
+  \includegraphics[width=1\linewidth]{images/501973_12_madgwickfilter.png}
+  \caption[]{scikit kinematics AHRS Madgwick filter.}
+  %
+  \label{fig:501973_12_madgwick}
+\end{figure}
 
+\begin{figure}[ht]
+  \includegraphics[width=1\linewidth]{images/501973_12_mahonyfilter.png}
+  \caption[]{scikit kinematics AHRS Mahony filter.}
+  %
+  \label{fig:501973_12_mahony}
+\end{figure}
 
+\begin{figure}[ht] %t
+  \includegraphics[width=1\linewidth]{images/984799_23_madgwickfilter.png}
+  \caption[]{scikit kinematics AHRS Madgwick filter.}
+  %
+  \label{fig:984799_23_madgwick}
+\end{figure}
 
-
-
-
-
-
-
-
-\subsection{Conclusion and further work}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\section*{References}
-
-\small
-
-[1] Manon Kok, Jeroen D. Hol and Thomas B. Schon (2017), Using
-Inertial Sensors for Position and Orientation Estimation,
-{\it Foundations and Trends in Signal Processing: Vol. 11: No. 1-2},
-pp 1-153. \\ \url{http://dx.doi.org/10.1561/2000000094}
-
-[2] SITOVÁ, Zdeňka, Jaroslav ŠEDĚNKA, Qing YANG, Ge PENG, Gang ZHOU,
-Paolo GASTI and Kiran BALAGANI. HMOG: New Behavioral Biometric Features
-for Continuous Authentication of Smartphone Users. {\it IEEE Transactions on
-Information Forensics and Security, 2016, Vol. 11, No. 5}, p. 877 - 892.
-ISSN 1556-6013. \\ \url{http://dx.doi.org/10.1109/TIFS.2015.2506542}
-
-[3] MATLAB Sensor Fustion and Tracking Toolbox. \\ \url{https://www.mathworks.com/help/fusion/}
-
-[4] Scikit Kinematics Library. \\ \url{http://work.thaslwanter.at/skinematics/html}
-
-[5] Open Source Sensor Fusion. \\ \url{https://github.com/memsindustrygroup/Open-Source-Sensor-Fusion/tree/master/docs}
+\begin{figure}[ht]
+  \includegraphics[width=1\linewidth]{images/984799_23_mahonyfilter.png}
+  \caption[]{scikit kinematics AHRS Mahony filter.}
+  %
+  \label{fig:984799_23_mahony}
+\end{figure}
 
 \end{document}
